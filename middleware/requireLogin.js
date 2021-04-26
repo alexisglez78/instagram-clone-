@@ -13,7 +13,6 @@ module.exports = (req, resp, next) => {
     }
     const token = authorization.replace("Bearer ", "")
     jwt.verify(token, JWT_SECRET, (err, payload) => {
-        console.log(token)
         if (err) {
             return resp.status(401).json({
                 error: true,
@@ -23,9 +22,9 @@ module.exports = (req, resp, next) => {
         const { _id } = payload
         User.findById(_id).then(userData => {
             req.user = userData
+            next()
         })
 
-        next()
     })
 
 }

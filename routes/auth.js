@@ -8,10 +8,9 @@ const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../keys')
 const requireLogin = require('../middleware/requireLogin')
 
-router.get('/protected', requireLogin, (req, resp) => {
-    console.log('entro')
-    resp.send("hello user ")
-})
+// router.get('/protected', requireLogin, (req, resp) => {
+//     resp.send("hello user ")
+// })
 
 router.post('/signup', (req, res) => {
     const { name, email, password } = req.body
@@ -52,6 +51,7 @@ router.post('/signup', (req, res) => {
 
 })
 
+// entrar 
 router.post('/signIn', (req, res) => {
     const { name, email, password } = req.body
     if (!email || !password) {
@@ -72,17 +72,12 @@ router.post('/signIn', (req, res) => {
                 .then(doMatch => {
                     if (doMatch) {
                         const token = jwt.sign({
-                            id: savedUser._id
+                            _id: savedUser._id
                         }, JWT_SECRET)
-                        res.json({
+                        return res.json({
                             error: false,
                             token: token
                         })
-                        // res.json({
-                        //     error: false,
-                        //     message: 'successfully signed in '
-                        // })
-
                     } else {
                         return res.status(422).json({
                             error: true,
@@ -91,7 +86,7 @@ router.post('/signIn', (req, res) => {
                     }
                 })
                 .catch(err => {
-                    console.log(error)
+                    console.log(err)
                 })
         })
 })
